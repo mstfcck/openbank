@@ -1,0 +1,123 @@
+# application.yml - Main configuration
+server:
+  port: 9999
+
+spring:
+  cloud:
+
+    config:
+      enabled: false
+
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+          lower-case-service-id: true
+
+      # Default filters applied to all routes
+      default-filters:
+        - name: RequestRateLimiter
+          args:
+            redis-rate-limiter.replenishRate: 10
+            redis-rate-limiter.burstCapacity: 20
+            key-resolver: "#{@ipKeyResolver}"
+        - name: Retry
+          args:
+            retries: 3
+            statuses: BAD_GATEWAY
+            methods: GET,POST
+            backoff:
+              firstBackoff: 50ms
+              maxBackoff: 500ms
+              factor: 2
+              basedOnPreviousValue: false
+        - AddResponseHeader=X-Response-Time, ${responseStartTime}
+        - RemoveRequestHeader=Cookie # Remove sensitive headers
+        - name: CircuitBreaker
+          args:
+            name: defaultCircuitBreaker
+            fallbackUri: forward:/fallback
+
+      # Route definitions
+      routes:
+        # Account Service
+        - id: account-service
+          uri: lb://ACCOUNT-SERVICE
+          predicates:
+            - Path=/api/accounts/**
+          filters:
+            - name: RequestSize
+              args:
+                maxSize: 5MB
+            - StripPrefix=1
+
+        # Transaction Service
+        - id: transaction-service
+          uri: lb://TRANSACTION-SERVICE
+          predicates:
+            - Path=/api/transactions/**
+          filters:
+            - StripPrefix=1
+            - name: CircuitBreaker
+              args:
+                name: transactionCircuitBreaker
+                fallbackUri: forward:/transaction-fallback
+
+        # User Service
+        - id: user-service
+          uri: lb://USER-SERVICE
+          predicates:
+            - Path=/api/users/**
+          filters:
+            - StripPrefix=1
+            - AddRequestHeader=X-Gateway-Source, api-gateway
+            - AddResponseHeader=X-User-Service, user-api-gateway
+
+        # API Documentation
+        - id: openapi
+          uri: http://localhost:${server.port}
+          predicates:
+            - Path=/v3/api-docs/**
+          filters:
+            - RewritePath=/v3/api-docs/(?<path>.*), /$\{path}/v3/api-docs
+
+  # Redis for rate limiting
+  data:
+    redis:
+      host: localhost
+      port: 6379
+
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://localhost:8080/realms/demo
+
+# Actuator endpoints for monitoring
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,gateway
+  endpoint:
+    health:
+      show-details: always
+    gateway:
+      enabled: true
+
+# Logging
+logging:
+  level:
+    org.springframework.cloud.gateway: DEBUG
+    reactor.netty: INFO
+
+# API Documentation
+springdoc:
+  swagger-ui:
+    urls:
+      - name: account
+        url: /v3/api-docs/account-service
+      - name: transaction
+        url: /v3/api-docs/transaction-service
+      - name: user
+        url: /v3/api-docs/user-service
