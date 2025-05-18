@@ -18,7 +18,8 @@
     <artifactId>openbank</artifactId>
     <version>0.0.1-SNAPSHOT</version>
 
-    <!-- The packaging type of the project. In this case, it's a parent POM. Determines lifecycle phases and default plugin behavior (e.g. jar, war, pom). -->
+    <!-- The packaging type of the project. In this case, it's a parent POM.
+    Determines lifecycle phases and default plugin behavior (e.g. jar, war, pom). -->
     <packaging>pom</packaging>
 
     <name>Open Bank</name>
@@ -28,6 +29,7 @@
     <!-- The parent POM is used to manage the versions of dependencies and plugins for all child modules. -->
     <modules>
         <module>gateway</module>
+        <module>shared</module>
         <module>user-service</module>
         <module>account-service</module>
         <module>transaction-service</module>
@@ -36,16 +38,32 @@
     <properties>
         <!-- Java & JDK versions -->
         <java.version>24</java.version>
-        <maven.compiler.release>24</maven.compiler.release>
+
+        <maven.compiler.release>${java.version}</maven.compiler.release>
+        <maven.compiler.source>${java.version}</maven.compiler.source>
+        <maven.compiler.target>${java.version}</maven.compiler.target>
+
         <spring-boot.version>3.4.5</spring-boot.version>
-        <!-- Spring Cloud BOM version (if using Spring Cloud) -->
         <spring-cloud.version>2024.0.1</spring-cloud.version>
+
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+
+        <lombok.version>1.18.38</lombok.version>
+        <mapstruct.version>1.6.3</mapstruct.version>
+        <springdoc.version>2.8.8</springdoc.version>
+        <postgresql.version>47.7.3</postgresql.version>
+        <flyway.version>11.8.2</flyway.version>
+        <axon.version>4.11.2</axon.version>
+        <resilience4j.version>2.3.0</resilience4j.version>
+        <testcontainers.version>1.21.0</testcontainers.version>
+
     </properties>
 
     <dependencyManagement>
         <dependencies>
+
+            <!-- Spring Cloud BOM -->
             <dependency>
                 <groupId>org.springframework.cloud</groupId>
                 <artifactId>spring-cloud-dependencies</artifactId>
@@ -53,27 +71,131 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
+
+            <!-- OpenBank Shared Module -->
+            <dependency>
+                <groupId>com.mstfcck</groupId>
+                <artifactId>shared</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <!-- Lombok -->
+            <dependency>
+                <groupId>org.projectlombok</groupId>
+                <artifactId>lombok</artifactId>
+                <version>${lombok.version}</version>
+                <scope>provided</scope>
+            </dependency>
+
+            <!-- MapStruct -->
+            <dependency>
+                <groupId>org.mapstruct</groupId>
+                <artifactId>mapstruct</artifactId>
+                <version>${mapstruct.version}</version>
+            </dependency>
+
+            <!-- Springdoc OpenAPI -->
+            <dependency>
+                <groupId>org.springdoc</groupId>
+                <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+                <version>${springdoc.version}</version>
+            </dependency>
+
+            <!-- PostgreSQL -->
+            <dependency>
+                <groupId>org.postgresql</groupId>
+                <artifactId>postgresql</artifactId>
+                <version>${postgresql.version}</version>
+            </dependency>
+
+            <!-- Flyway -->
+            <dependency>
+                <groupId>org.flywaydb</groupId>
+                <artifactId>flyway-core</artifactId>
+                <version>${flyway.version}</version>
+            </dependency>
+
+            <!-- Axon Framework for CQRS and Event Sourcing -->
+            <dependency>
+                <groupId>org.axonframework</groupId>
+                <artifactId>axon-spring-boot-starter</artifactId>
+                <version>${axon.version}</version>
+            </dependency>
+
+            <!-- Resilience4j for Circuit Breaker -->
+            <dependency>
+                <groupId>io.github.resilience4j</groupId>
+                <artifactId>resilience4j-spring-boot3</artifactId>
+                <version>${resilience4j.version}</version>
+            </dependency>
+
+            <!-- Test Containers -->
+            <dependency>
+                <groupId>org.testcontainers</groupId>
+                <artifactId>testcontainers-bom</artifactId>
+                <version>${testcontainers.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
         </dependencies>
     </dependencyManagement>
 
     <build>
         <pluginManagement>
             <plugins>
+
                 <!-- Spring Boot Maven Plugin -->
                 <plugin>
                     <groupId>org.springframework.boot</groupId>
                     <artifactId>spring-boot-maven-plugin</artifactId>
                     <version>${spring-boot.version}</version>
+                    <configuration>
+                        <excludes>
+                            <!-- Lombok is a library that generates boilerplate code (e.g., getters, setters, and constructors) at compile time.
+                            However, it is not required in the runtime environment because its functionality is only needed during compilation.
+                            By excluding it, the final build artifact (e.g., a JAR file) is kept smaller and free of unnecessary dependencies. -->
+                            <exclude>
+                                <groupId>org.projectlombok</groupId>
+                                <artifactId>lombok</artifactId>
+                            </exclude>
+                        </excludes>
+                    </configuration>
                 </plugin>
+
                 <!-- Compiler Plugin to target Java 24 -->
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-compiler-plugin</artifactId>
-                    <version>3.11.0</version>
+                    <version>3.12.1</version>
                     <configuration>
                         <release>${maven.compiler.release}</release>
+                        <source>${maven.compiler.source}</source>
+                        <target>${maven.compiler.target}</target>
+                        <!-- The selected code configures annotation processors for the Maven Compiler Plugin.
+                        Annotation processors are tools that process annotations at compile time to generate additional code or perform validation.
+                        This configuration ensures that the required annotation processors for Lombok and MapStruct are available during the build process. -->
+                        <annotationProcessorPaths>
+                            <path>
+                                <groupId>org.projectlombok</groupId>
+                                <artifactId>lombok</artifactId>
+                                <version>${lombok.version}</version>
+                            </path>
+                            <path>
+                                <groupId>org.mapstruct</groupId>
+                                <artifactId>mapstruct-processor</artifactId>
+                                <version>${mapstruct.version}</version>
+                            </path>
+                        </annotationProcessorPaths>
                     </configuration>
                 </plugin>
+
+                <plugin>
+                    <groupId>org.flywaydb</groupId>
+                    <artifactId>flyway-maven-plugin</artifactId>
+                    <version>${flyway.version}</version>
+                </plugin>
+
             </plugins>
         </pluginManagement>
     </build>
