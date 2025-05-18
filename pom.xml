@@ -2,48 +2,93 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
     https://maven.apache.org/xsd/maven-4.0.0.xsd">
+
     <modelVersion>4.0.0</modelVersion>
+
+    <!-- Inherit from Spring Boot Starter Parent -->
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>3.4.5</version>
+        <relativePath/> <!-- lookup only in local repo -->
+    </parent>
+
+    <!-- Uniquely identify the build output. -->
     <groupId>com.openbank</groupId>
     <artifactId>openbank</artifactId>
     <version>0.0.1-SNAPSHOT</version>
+
+    <!-- The packaging type of the project. In this case, it's a parent POM. Determines lifecycle phases and default plugin behavior (e.g. jar, war, pom). -->
     <packaging>pom</packaging>
+
+    <name>Open Bank</name>
+    <description>Open Bank application.</description>
+    <url>https://github.com/mstfcck/openbank</url>
+
+    <!-- The parent POM is used to manage the versions of dependencies and plugins for all child modules. -->
     <modules>
         <module>gateway</module>
         <module>user-service</module>
         <module>account-service</module>
         <module>transaction-service</module>
     </modules>
+
     <properties>
+        <!-- Java & JDK versions -->
         <java.version>24</java.version>
+        <maven.compiler.release>24</maven.compiler.release>
         <spring-boot.version>3.4.5</spring-boot.version>
+        <!-- Spring Cloud BOM version (if using Spring Cloud) -->
+        <spring-cloud.version>2024.0.1</spring-cloud.version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     </properties>
+
     <dependencyManagement>
         <dependencies>
             <dependency>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-dependencies</artifactId>
-                <version>${spring-boot.version}</version>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-dependencies</artifactId>
+                <version>${spring-cloud.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
-<!--            <dependency>-->
-<!--                <groupId>org.springframework.boot</groupId>-->
-<!--                <artifactId>spring-boot-starter-parent</artifactId>-->
-<!--                <version>${spring-boot.version}</version>-->
-<!--                <type>pom</type>-->
-<!--                <scope>import</scope>-->
-<!--            </dependency>-->
         </dependencies>
     </dependencyManagement>
+
     <build>
         <pluginManagement>
             <plugins>
+                <!-- Spring Boot Maven Plugin -->
                 <plugin>
                     <groupId>org.springframework.boot</groupId>
                     <artifactId>spring-boot-maven-plugin</artifactId>
                     <version>${spring-boot.version}</version>
                 </plugin>
+                <!-- Compiler Plugin to target Java 24 -->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <version>3.11.0</version>
+                    <configuration>
+                        <release>${maven.compiler.release}</release>
+                    </configuration>
+                </plugin>
             </plugins>
         </pluginManagement>
     </build>
+
+    <distributionManagement>
+        <repository>
+            <id>github</id>
+            <name>GitHub Packages</name>
+            <url>https://maven.pkg.github.com/mstfcck/openbank</url>
+        </repository>
+        <snapshotRepository>
+            <id>github</id>
+            <name>GitHub Packages Snapshots</name>
+            <url>https://maven.pkg.github.com/mstfcck/openbank</url>
+        </snapshotRepository>
+    </distributionManagement>
+
 </project>

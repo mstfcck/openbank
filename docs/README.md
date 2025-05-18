@@ -7,7 +7,7 @@
 Project:
 
 - Builder: Maven
-- Language: Java
+- Language: Java 24
 - SDK Version: OpenSDK 24
 - Framework: Spring Boot 3.4.5
 
@@ -62,96 +62,113 @@ Resources:
 
 - Review all requirements one by one, non-functional requirements should be built accordingly to functional requirements.
 - Make sure all the required dependencies are implemented for each project.
-- Make sure all the best practices are applied correctly for each projectç
+- Make sure all the best practices are applied correctly for each project.
 - After creating the entire project structure, export it as a ZIP file.
 
 
 
-banking-microservices/
-├── api-gateway/
-│   ├── src/
-│   │   └── main/
-│   │       ├── java/
-│   │       │   └── com/
-│   │       │       └── openbank/
-│   │       │           └── gateway/
-│   │       │               └── ApiGatewayApplication.java
-│   │       └── resources/
-│   │           └── application.yml
-│   └── pom.xml
-├── account-service/
-│   ├── src/
-│   │   ├── main/
-│   │   │   ├── java/
-│   │   │   │   └── com/
-│   │   │   │       └── openbank/
-│   │   │   │           └── account/
-│   │   │   │               ├── AccountServiceApplication.java
-│   │   │   │               ├── controller/
-│   │   │   │               │   └── AccountController.java
-│   │   │   │               ├── model/
-│   │   │   │               │   └── Account.java
-│   │   │   │               ├── repository/
-│   │   │   │               │   └── AccountRepository.java
-│   │   │   │               ├── service/
-│   │   │   │               │   └── AccountService.java
-│   │   │   │               └── client/
-│   │   │   │                   └── UserServiceClient.java
-│   │   │   └── resources/
-│   │   │       └── application.yml
-│   │   └── test/
-│   │       └── java/
-│   │           └── com/
-│   │               └── openbank/
-│   │                   └── account/
-│   │                       └── AccountServiceTests.java
-│   └── pom.xml
-├── transaction-service/
-│   ├── src/
-│   │   ├── main/
-│   │   │   ├── java/
-│   │   │   │   └── com/
-│   │   │   │       └── openbank/
-│   │   │   │           └── transaction/
-│   │   │   │               ├── TransactionServiceApplication.java
-│   │   │   │               ├── controller/
-│   │   │   │               │   └── TransactionController.java
-│   │   │   │               ├── model/
-│   │   │   │               │   └── Transaction.java
-│   │   │   │               ├── repository/
-│   │   │   │               │   └── TransactionRepository.java
-│   │   │   │               ├── service/
-│   │   │   │               │   └── TransactionService.java
-│   │   │   │               └── client/
-│   │   │   │                   ├── AccountServiceClient.java
-│   │   │   │                   └── UserServiceClient.java
-│   │   │   └── resources/
-│   │   │       └── application.yml
-│   │   └── test/
-│   └── pom.xml
-├── user-service/
-│   ├── src/
-│   │   ├── main/
-│   │   │   ├── java/
-│   │   │   │   └── com/
-│   │   │   │       └── openbank/
-│   │   │   │           └── user/
-│   │   │   │               ├── UserServiceApplication.java
-│   │   │   │               ├── controller/
-│   │   │   │               │   └── UserController.java
-│   │   │   │               ├── model/
-│   │   │   │               │   └── User.java
-│   │   │   │               ├── repository/
-│   │   │   │               │   └── UserRepository.java
-│   │   │   │               └── service/
-│   │   │   │                   └── UserService.java
-│   │   │   └── resources/
-│   │   │       └── application.yml
-│   │   └── test/
-│   └── pom.xml
-├── discovery-service/
-│   └── (Service discovery implementation)
-├── config-service/
-│   └── (Configuration server implementation)
-├── docker-compose.yml
-└── parent-pom.xml (Optional parent POM)
+
+    banking-microservices/
+    ├── api-gateway/
+    │   ├── src/
+    │   │   └── main/
+    │   │       ├── java/
+    │   │       │   └── com/
+    │   │       │       └── openbank/
+    │   │       │           └── gateway/
+    │   │       │               └── ApiGatewayApplication.java
+    │   │       └── resources/
+    │   │           └── application.yml
+    │   └── pom.xml
+    ├── account-service/
+    │   ├── src/
+    │   │   ├── main/
+    │   │   │   ├── java/
+    │   │   │   │   └── com/
+    │   │   │   │       └── openbank/
+    │   │   │   │           └── account/
+    │   │   │   │               ├── AccountServiceApplication.java
+    │   │   │   │               ├── controller/
+    │   │   │   │               │   └── AccountController.java
+    │   │   │   │               ├── model/
+    │   │   │   │               │   └── Account.java
+    │   │   │   │               ├── repository/
+    │   │   │   │               │   └── AccountRepository.java
+    │   │   │   │               ├── service/
+    │   │   │   │               │   └── AccountService.java
+    │   │   │   │               └── client/
+    │   │   │   │                   └── UserServiceClient.java
+    │   │   │   └── resources/
+    │   │   │       └── application.yml
+    │   │   └── test/
+    │   │       └── java/
+    │   │           └── com/
+    │   │               └── openbank/
+    │   │                   └── account/
+    │   │                       └── AccountServiceTests.java
+    │   └── pom.xml
+    ├── transaction-service/
+    │   ├── src/
+    │   │   ├── main/
+    │   │   │   ├── java/
+    │   │   │   │   └── com/
+    │   │   │   │       └── openbank/
+    │   │   │   │           └── transaction/
+    │   │   │   │               ├── TransactionServiceApplication.java
+    │   │   │   │               ├── controller/
+    │   │   │   │               │   └── TransactionController.java
+    │   │   │   │               ├── model/
+    │   │   │   │               │   └── Transaction.java
+    │   │   │   │               ├── repository/
+    │   │   │   │               │   └── TransactionRepository.java
+    │   │   │   │               ├── service/
+    │   │   │   │               │   └── TransactionService.java
+    │   │   │   │               └── client/
+    │   │   │   │                   ├── AccountServiceClient.java
+    │   │   │   │                   └── UserServiceClient.java
+    │   │   │   └── resources/
+    │   │   │       └── application.yml
+    │   │   └── test/
+    │   └── pom.xml
+    ├── user-service/
+    │   ├── src/
+    │   │   ├── main/
+    │   │   │   ├── java/
+    │   │   │   │   └── com/
+    │   │   │   │       └── openbank/
+    │   │   │   │           └── user/
+    │   │   │   │               ├── UserServiceApplication.java
+    │   │   │   │               ├── controller/
+    │   │   │   │               │   └── UserController.java
+    │   │   │   │               ├── model/
+    │   │   │   │               │   └── User.java
+    │   │   │   │               ├── repository/
+    │   │   │   │               │   └── UserRepository.java
+    │   │   │   │               └── service/
+    │   │   │   │                   └── UserService.java
+    │   │   │   └── resources/
+    │   │   │       └── application.yml
+    │   │   └── test/
+    │   └── pom.xml
+    ├── discovery-service/
+    │   └── (Service discovery implementation)
+    ├── config-service/
+    │   └── (Configuration server implementation)
+    ├── docker-compose.yml
+    └── parent-pom.xml (Optional parent POM)
+
+# Usage of the project packages
+
+    <repositories>
+      <repository>
+        <id>github</id>
+        <name>GitHub Packages</name>
+        <url>https://maven.pkg.github.com/mstfcck/openbank</url>
+      </repository>
+    </repositories>
+
+    <dependency>
+      <groupId>com.openbank</groupId>
+      <artifactId>user-service</artifactId>
+      <version>0.0.1</version>
+    </dependency>
