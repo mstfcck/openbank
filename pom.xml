@@ -37,7 +37,7 @@
 
     <properties>
         <!-- Java & JDK versions -->
-        <java.version>24</java.version>
+        <java.version>21</java.version>
 
         <maven.compiler.release>${java.version}</maven.compiler.release>
         <maven.compiler.source>${java.version}</maven.compiler.source>
@@ -126,6 +126,13 @@
             <dependency>
                 <groupId>io.github.resilience4j</groupId>
                 <artifactId>resilience4j-spring-boot3</artifactId>
+                <version>${resilience4j.version}</version>
+            </dependency>
+            
+            <!-- Explicitly align spring6 version to avoid transitive version mismatch -->
+            <dependency>
+                <groupId>io.github.resilience4j</groupId>
+                <artifactId>resilience4j-spring6</artifactId>
                 <version>${resilience4j.version}</version>
             </dependency>
 
