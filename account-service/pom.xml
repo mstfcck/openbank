@@ -63,6 +63,27 @@
 			<scope>test</scope>
 		</dependency>
 
+		<!-- Lombok for reducing boilerplate code -->
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<scope>provided</scope>
+		</dependency>
+
+		<!-- Dependency on the shared module -->
+		<dependency>
+			<groupId>com.openbank</groupId>
+			<artifactId>shared</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
+
+		<!-- Springdoc OpenAPI for Swagger UI and OpenAPI documentation -->
+		<dependency>
+			<groupId>org.springdoc</groupId>
+			<artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+			<!-- Version inherited from parent pom -->
+		</dependency>
+
 	</dependencies>
 
 	<build>

@@ -94,7 +94,7 @@
                 <version>${mapstruct.version}</version>
             </dependency>
 
-            <!-- Springdoc OpenAPI -->
+            <!-- Springdoc OpenAPI for Swagger UI and OpenAPI documentation -->
             <dependency>
                 <groupId>org.springdoc</groupId>
                 <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
