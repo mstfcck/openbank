@@ -1,6 +1,6 @@
 package com.openbank.accountservice.repository;
 
-import com.openbank.accountservice.model.Account;
+import com.openbank.accountservice.entity.Account;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

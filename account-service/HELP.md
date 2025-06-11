@@ -1,6 +1,7 @@
 # Getting Started
 
 ### Reference Documentation
+
 For further reference, please consider the following sections:
 
 * [Official Apache Maven documentation](https://maven.apache.org/guides/index.html)
@@ -9,6 +10,7 @@ For further reference, please consider the following sections:
 * [Spring Web](https://docs.spring.io/spring-boot/3.4.5/reference/web/servlet.html)
 
 ### Guides
+
 The following guides illustrate how to use some features concretely:
 
 * [Building a RESTful Web Service](https://spring.io/guides/gs/rest-service/)
@@ -22,21 +24,37 @@ While most of the inheritance is fine, it also inherits unwanted elements like `
 To prevent this, the project POM contains empty overrides for these elements.
 If you manually switch to a different parent and actually want the inheritance, you need to remove those overrides.
 
+### Generate Certificate
 
+> keytool -genkeypair -alias accountservice -keyalg RSA -keysize 2048 -storetype PKCS12 -keystore src/main/resources/keystore.p12 -validity 3650 -storepass changeit -dname "CN=localhost,OU=OpenBank,O=OpenBank,L=Local,ST=NA,C=US"
 
+**Export the certificate from your keystore:**
 
-keytool -genkeypair -alias accountservice -keyalg RSA -keysize 2048 -storetype PKCS12 -keystore src/main/resources/keystore.p12 -validity 3650 -storepass changeit -dname "CN=localhost,OU=OpenBank,O=OpenBank,L=Local,ST=NA,C=US"
+> keytool -exportcert -alias accountservice -keystore src/main/resources/keystore.p12 -storetype PKCS12 -storepass changeit -rfc -file accountservice.crt
 
-1. Export the certificate from your keystore:
-keytool -exportcert -alias accountservice -keystore src/main/resources/keystore.p12 -storetype PKCS12 -storepass changeit -rfc -file accountservice.crt
-
-2. Import the certificate into your system trust store:
+**Import the certificate into your system trust store:**
 
 On macOS, double-click accountservice.crt and add it to the "System" keychain, then set it to "Always Trust".
+
 On Windows, right-click and install to "Trusted Root Certification Authorities".
+
 On Linux, use your distro's certificate management tools.
-3. Restart Chrome and revisit https://localhost:8443/swagger-ui.html.
 
-./mvnw clean package && ./mvnw spring-boot:run
+**Restart Chrome and revisit <https://localhost:8092/swagger-ui.html>.**
 
-cd account-service && ./mvnw clean spring-boot:run
+### Clean
+
+> ./mvnw clean package
+
+### Run
+
+> ./mvnw spring-boot:run
+
+> ./mvnw clean spring-boot:run
+
+> cd account-service && ./mvnw clean spring-boot:run
+
+### Kill the Port
+
+> lsof -i :8443
+> kill -9 79825

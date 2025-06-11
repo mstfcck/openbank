@@ -1,4 +1,4 @@
-package com.openbank.accountservice.model;
+package com.openbank.accountservice.entity;
 
 import com.openbank.BaseEntity;
 import jakarta.persistence.Column;

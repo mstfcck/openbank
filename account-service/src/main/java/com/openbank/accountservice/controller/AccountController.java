@@ -1,6 +1,7 @@
 package com.openbank.accountservice.controller;
 
-import com.openbank.accountservice.model.Account;
+import com.openbank.accountservice.model.AccountRequest;
+import com.openbank.accountservice.model.AccountResponse;
 import com.openbank.accountservice.service.AccountService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -15,20 +16,20 @@ public class AccountController {
     private final AccountService accountService;
 
     @PostMapping
-    public ResponseEntity<Account> createAccount(@RequestBody Account account) {
-        Account created = accountService.createAccount(account);
+    public ResponseEntity<AccountResponse> createAccount(@RequestBody AccountRequest request) {
+        AccountResponse created = accountService.createAccount(request);
         return ResponseEntity.status(201).body(created);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Account> getAccount(@PathVariable Long id) {
+    public ResponseEntity<AccountResponse> getAccount(@PathVariable Long id) {
         return accountService.getAccount(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
     @GetMapping
-    public List<Account> getAllAccounts() {
+    public List<AccountResponse> getAllAccounts() {
         return accountService.getAllAccounts();
     }
 

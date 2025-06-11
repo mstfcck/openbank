@@ -32,6 +32,11 @@ openbank-microservices/
 │   │   │   │               ├── controller/
 │   │   │   │               │   └── AccountController.java
 │   │   │   │               ├── model/
+│   │   │   │               │   └── AccountRequest.java
+│   │   │   │               │   └── AccountResponse.java
+│   │   │   │               │   └── validator/
+│   │   │   │               │       └── AccountRequestValidator.java
+│   │   │   │               ├── entity/
 │   │   │   │               │   └── Account.java
 │   │   │   │               ├── repository/
 │   │   │   │               │   └── AccountRepository.java
@@ -59,6 +64,11 @@ openbank-microservices/
 │   │   │   │               ├── controller/
 │   │   │   │               │   └── TransactionController.java
 │   │   │   │               ├── model/
+│   │   │   │               │   └── TransactionRequest.java
+│   │   │   │               │   └── TransactionResponse.java
+│   │   │   │               │   └── validator/
+│   │   │   │               │       └── TransactionRequestValidator.java
+│   │   │   │               ├── entity/
 │   │   │   │               │   └── Transaction.java
 │   │   │   │               ├── repository/
 │   │   │   │               │   └── TransactionRepository.java
@@ -82,6 +92,11 @@ openbank-microservices/
 │   │   │   │               ├── controller/
 │   │   │   │               │   └── UserController.java
 │   │   │   │               ├── model/
+│   │   │   │               │   └── UserRequest.java
+│   │   │   │               │   └── UserResponse.java
+│   │   │   │               │   └── validator/
+│   │   │   │               │       └── UserRequestValidator.java
+│   │   │   │               ├── entity/
 │   │   │   │               │   └── User.java
 │   │   │   │               ├── repository/
 │   │   │   │               │   └── UserRepository.java
