@@ -79,6 +79,7 @@ The project must be develop using Spring Boot and the relevent modules based on 
   - Dependency Injection: https://docs.spring.io/spring-framework/reference/core/beans/dependencies/factory-collaborators.html
   - Autowiring Collaborators: https://docs.spring.io/spring-framework/reference/core/beans/dependencies/factory-autowire.html
   - Method Injection: https://docs.spring.io/spring-framework/reference/core/beans/dependencies/factory-method-injection.html
+- Spring OpenAPI: https://springdoc.org/
 - Lombok: https://projectlombok.org/features/GetterSetter
 - Microservices: https://spring.io/microservices
 - Microservice Patterns: https://microservices.io/patterns/index.html

@@ -45,7 +45,7 @@ openbank-microservices/
 │   │       └── java/
 │   │           └── com/
 │   │               └── openbank/
-│   │                   └── account/
+│   │                   └── accountservice/
 │   │                       └── AccountServiceTests.java
 │   └── pom.xml
 ├── transaction-service/
