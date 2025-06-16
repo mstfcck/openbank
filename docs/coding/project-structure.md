@@ -4,20 +4,20 @@
 
 This project structure is designed for large-scale, enterprise-level Spring Boot applications for development teams while maintaining code quality, scalability, reliability and maintainability.
 
-## Complete Project Structure
+## Project Structure
 
 Project folder and file structures must conform to the following scheme.
 
 ```
 openbank-microservices/
-├── api-gateway/
+├── gateway/
 │   ├── src/
 │   │   └── main/
 │   │       ├── java/
 │   │       │   └── com/
 │   │       │       └── openbank/
 │   │       │           └── gateway/
-│   │       │               └── ApiGatewayApplication.java
+│   │       │               └── GatewayApplication.java
 │   │       └── resources/
 │   │           └── application.yml
 │   └── pom.xml
