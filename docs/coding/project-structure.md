@@ -4,7 +4,7 @@
 
 This project structure is designed for large-scale, enterprise-level Spring Boot applications for development teams while maintaining code quality, scalability, reliability and maintainability.
 
-## Project Structure
+## Structure
 
 Project folder and file structures must conform to the following scheme.
 
@@ -31,12 +31,12 @@ openbank-microservices/
 │   │   │   │               ├── AccountServiceApplication.java
 │   │   │   │               ├── controller/
 │   │   │   │               │   └── AccountController.java
-│   │   │   │               ├── model/
+│   │   │   │               ├── DTOs/
 │   │   │   │               │   └── AccountRequest.java
 │   │   │   │               │   └── AccountResponse.java
 │   │   │   │               │   └── validator/
 │   │   │   │               │       └── AccountRequestValidator.java
-│   │   │   │               ├── entity/
+│   │   │   │               ├── model/
 │   │   │   │               │   └── Account.java
 │   │   │   │               ├── repository/
 │   │   │   │               │   └── AccountRepository.java
@@ -63,12 +63,12 @@ openbank-microservices/
 │   │   │   │               ├── TransactionServiceApplication.java
 │   │   │   │               ├── controller/
 │   │   │   │               │   └── TransactionController.java
-│   │   │   │               ├── model/
+│   │   │   │               ├── DTOs/
 │   │   │   │               │   └── TransactionRequest.java
 │   │   │   │               │   └── TransactionResponse.java
 │   │   │   │               │   └── validator/
 │   │   │   │               │       └── TransactionRequestValidator.java
-│   │   │   │               ├── entity/
+│   │   │   │               ├── model/
 │   │   │   │               │   └── Transaction.java
 │   │   │   │               ├── repository/
 │   │   │   │               │   └── TransactionRepository.java
@@ -91,12 +91,12 @@ openbank-microservices/
 │   │   │   │               ├── UserServiceApplication.java
 │   │   │   │               ├── controller/
 │   │   │   │               │   └── UserController.java
-│   │   │   │               ├── model/
+│   │   │   │               ├── DTOs/
 │   │   │   │               │   └── UserRequest.java
 │   │   │   │               │   └── UserResponse.java
 │   │   │   │               │   └── validator/
 │   │   │   │               │       └── UserRequestValidator.java
-│   │   │   │               ├── entity/
+│   │   │   │               ├── model/
 │   │   │   │               │   └── User.java
 │   │   │   │               ├── repository/
 │   │   │   │               │   └── UserRepository.java
@@ -111,5 +111,5 @@ openbank-microservices/
 ├── config-service/
 │   └── (Configuration server implementation)
 ├── docker-compose.yml
-└── parent-pom.xml (Optional parent POM)
+└── pom.xml (Parent POM)
 ```

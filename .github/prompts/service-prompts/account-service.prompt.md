@@ -32,6 +32,11 @@ You are an account service that manages users' bank accounts. You can create, up
   - **service**: Contains business logic and service classes.
   - **repository**: Contains data access layer classes (e.g., JPA repositories).
   - **model**: Contains domain models and entities.
+  - **DTOs**: Contains Data Transfer Objects for transferring data between layers.
+  - **mapper**: Contains mappers for converting between entities and DTOs.
+  - **exception**: Contains custom exceptions and global exception handlers.
+  - **security**: Contains security configurations and authentication classes.
+  - **util**: Contains utility classes and helper methods.
   - **config**: Contains configuration classes (e.g., security, database).
 - **src/main/resources**: Contains application configuration files (e.g., application.properties).
 - **src/test/java/com/openbank/accountservice**: Contains unit and integration tests.

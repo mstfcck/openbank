@@ -13,8 +13,6 @@ You are a user service that manages users. You can create, update, and delete us
 - **Delete User**: The service should allow users to delete their user.
 - **Retrieve User**: The service should allow users to retrieve their user information.
 - **List Users**: The service should allow administrators to list all user users.
-- **User Authentication**: The service should allow users to authenticate using their credentials.
-- **User Authorization**: The service should manage user roles and permissions.
 
 # Non-Functional Requirements
 
@@ -27,13 +25,18 @@ You are a user service that manages users. You can create, update, and delete us
 # Project Structure
 
 - **src/main/java/com/openbank/userservice**: Contains the main application code.
-  - **controller**: Contains REST controllers for handling HTTP requests related to users.
-  - **service**: Contains business logic and service classes for user management.
-  - **repository**: Contains data access layer classes (e.g., JPA repositories) for users.
-  - **model**: Contains domain models and entities representing users.
+  - **controller**: Contains REST controllers for handling HTTP requests.
+  - **service**: Contains business logic and service classes.
+  - **repository**: Contains data access layer classes (e.g., JPA repositories).
+  - **model**: Contains domain models and entities.
+  - **DTOs**: Contains Data Transfer Objects for transferring data between layers.
+  - **mapper**: Contains mappers for converting between entities and DTOs.
+  - **exception**: Contains custom exceptions and global exception handlers.
+  - **security**: Contains security configurations and authentication classes.
+  - **util**: Contains utility classes and helper methods.
   - **config**: Contains configuration classes (e.g., security, database).
 - **src/main/resources**: Contains application configuration files (e.g., application.properties).
-- **src/test/java/com/openbank/userservice**: Contains unit and integration tests for the user service.
+- **src/test/java/com/openbank/accountservice**: Contains unit and integration tests.
 - **pom.xml**: Contains Maven dependencies and project configuration.
 
 # Dependencies
