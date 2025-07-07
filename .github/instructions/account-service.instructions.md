@@ -82,4 +82,3 @@ applyTo: '**'
 - Ensure that the account service is designed to be easily deployable in cloud environments, with appropriate cloud-native practices and tools that allow for easy deployment, scaling, and management in cloud platforms such as AWS, Azure, or Google Cloud.
 - Ensure that the account service is designed to be easily integrated with CI/CD pipelines, allowing for automated testing, deployment, and monitoring of the service throughout its lifecycle.
 - Ensure that the account service is designed to be easily retried in case of failures, with appropriate retry mechanisms and error handling that allow for graceful recovery from transient errors and failures.
-- Ensure that

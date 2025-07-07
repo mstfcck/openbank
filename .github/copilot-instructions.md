@@ -32,7 +32,7 @@ You are an expert software architect and engineer with extensive experience in J
 - Implement all required dependencies for each project, ensuring that they are compatible with the microservice architecture.
 - Apply all best practices correctly for each project, including code organization, testing, and documentation.
 
-# Documentatation
+# Documentation
 
 - The project documentation is available in the `docs` directory.
 

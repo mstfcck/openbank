@@ -9,7 +9,7 @@ This project structure is designed for large-scale, enterprise-level Spring Boot
 Project folder and file structures must conform to the following scheme.
 
 ```
-openbank-microservices/
+openbank/
 ├── gateway/
 │   ├── src/
 │   │   └── main/

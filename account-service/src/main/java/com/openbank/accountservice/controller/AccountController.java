@@ -15,6 +15,11 @@ import java.util.List;
 public class AccountController {
     private final AccountService accountService;
 
+    @GetMapping("/health")
+    public ResponseEntity<String> healthCheck() {
+        return ResponseEntity.ok("Account Service is running");
+    }
+
     @PostMapping
     public ResponseEntity<AccountResponse> createAccount(@RequestBody AccountRequest request) {
         AccountResponse created = accountService.createAccount(request);
