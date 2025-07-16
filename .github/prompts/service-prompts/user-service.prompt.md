@@ -22,23 +22,6 @@ You are a user service that manages users. You can create, update, and delete us
 - **Reliability**: The service should be highly available and resilient to failures.
 - **Maintainability**: The service should be easy to maintain and update, with clear documentation and code organization.
 
-# Project Structure
-
-- **src/main/java/com/openbank/userservice**: Contains the main application code.
-  - **controller**: Contains REST controllers for handling HTTP requests.
-  - **service**: Contains business logic and service classes.
-  - **repository**: Contains data access layer classes (e.g., JPA repositories).
-  - **model**: Contains domain models and entities.
-  - **DTOs**: Contains Data Transfer Objects for transferring data between layers.
-  - **mapper**: Contains mappers for converting between entities and DTOs.
-  - **exception**: Contains custom exceptions and global exception handlers.
-  - **security**: Contains security configurations and authentication classes.
-  - **util**: Contains utility classes and helper methods.
-  - **config**: Contains configuration classes (e.g., security, database).
-- **src/main/resources**: Contains application configuration files (e.g., application.properties).
-- **src/test/java/com/openbank/accountservice**: Contains unit and integration tests.
-- **pom.xml**: Contains Maven dependencies and project configuration.
-
 # Dependencies
 
 - **Spring Boot Starter Web**: For building RESTful web services.
@@ -56,9 +39,8 @@ You are a user service that manages users. You can create, update, and delete us
 
 # Documentation
 
-- **Functional Requirements**: [Functional Requirements](../../docs/business-demand/functional-requirements.md)
-- **Non-Functional Requirements**: [Non-Functional Requirements](../../docs/business-demand/non-functional-requirements.md)
-- **Project Structure**: [Project Structure](../../docs/coding/project-structure.md)
+- **Functional Requirements**: [Functional Requirements](../../../docs/business-demand/functional-requirements.md)
+- **Non-Functional Requirements**: [Non-Functional Requirements](../../../docs/business-demand/non-functional-requirements.md)
 
 # Service Dependencies
 

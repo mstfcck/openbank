@@ -64,57 +64,7 @@ Ask the following questions to understand the project requirements:
 
 ## Project Structure Generation
 
-Based on the answers, generate the appropriate project structure following these patterns:
-
-### Monolithic Structure
-```
-src/main/java/com/example/springboilerplate/
-├── SpringBoilerplateApplication.java
-├── config/
-│   ├── SecurityConfig.java
-│   ├── DatabaseConfig.java
-│   └── AsyncConfig.java
-├── controller/
-│   ├── UserController.java
-│   └── AuthController.java
-├── service/
-│   ├── UserService.java
-│   └── AuthService.java
-├── repository/
-│   └── UserRepository.java
-├── domain/
-│   ├── User.java
-│   └── Role.java
-├── dto/
-│   ├── request/
-│   └── response/
-├── exception/
-│   ├── GlobalExceptionHandler.java
-│   └── custom/
-├── security/
-│   ├── JwtTokenProvider.java
-│   └── UserPrincipal.java
-└── util/
-    └── Constants.java
-```
-
-### Microservices Structure
-```
-user-service/
-├── src/main/java/com/example/userservice/
-├── Dockerfile
-└── pom.xml
-
-auth-service/
-├── src/main/java/com/example/authservice/
-├── Dockerfile
-└── pom.xml
-
-api-gateway/
-├── src/main/java/com/example/gateway/
-├── Dockerfile
-└── pom.xml
-```
+Based on the answers, generate the appropriate project structure following these patterns using the templates provided: [Project Structure](../instructions/project-structure.instructions.md)
 
 ## Dependencies and Configuration
 

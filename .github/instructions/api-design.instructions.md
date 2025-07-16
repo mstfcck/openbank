@@ -337,6 +337,103 @@ public class GlobalExceptionHandler {
 }
 ```
 
+## RESTful Design Patterns
+
+Based on the requirements, recommend appropriate patterns:
+
+### Standard CRUD Operations
+```java
+@RestController
+@RequestMapping("/api/v1/users")
+@Tag(name = "User Management", description = "APIs for managing users")
+public class UserController {
+    
+    @GetMapping
+    @Operation(summary = "Get all users with pagination")
+    public ResponseEntity<PagedResponse<UserDTO>> getUsers(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "20") int size,
+            @RequestParam(required = false) String search) {
+        // Implementation
+    }
+    
+    @GetMapping("/{id}")
+    @Operation(summary = "Get user by ID")
+    public ResponseEntity<UserDTO> getUser(@PathVariable Long id) {
+        // Implementation
+    }
+    
+    @PostMapping
+    @Operation(summary = "Create new user")
+    public ResponseEntity<UserDTO> createUser(@Valid @RequestBody CreateUserRequest request) {
+        // Implementation
+    }
+    
+    @PutMapping("/{id}")
+    @Operation(summary = "Update user")
+    public ResponseEntity<UserDTO> updateUser(
+            @PathVariable Long id,
+            @Valid @RequestBody UpdateUserRequest request) {
+        // Implementation
+    }
+    
+    @DeleteMapping("/{id}")
+    @Operation(summary = "Delete user")
+    public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
+        // Implementation
+    }
+}
+```
+
+### Nested Resources
+```java
+@RestController
+@RequestMapping("/api/v1/users/{userId}/orders")
+public class UserOrderController {
+    
+    @GetMapping
+    public ResponseEntity<List<OrderDTO>> getUserOrders(@PathVariable Long userId) {
+        // Implementation
+    }
+    
+    @PostMapping
+    public ResponseEntity<OrderDTO> createUserOrder(
+            @PathVariable Long userId,
+            @Valid @RequestBody CreateOrderRequest request) {
+        // Implementation
+    }
+}
+```
+
+### Custom Actions
+```java
+@RestController
+@RequestMapping("/api/v1/users")
+public class UserController {
+    
+    @PostMapping("/{id}/activate")
+    @Operation(summary = "Activate user account")
+    public ResponseEntity<UserDTO> activateUser(@PathVariable Long id) {
+        // Implementation
+    }
+    
+    @PostMapping("/{id}/reset-password")
+    @Operation(summary = "Reset user password")
+    public ResponseEntity<Void> resetPassword(
+            @PathVariable Long id,
+            @Valid @RequestBody ResetPasswordRequest request) {
+        // Implementation
+    }
+    
+    @PostMapping("/bulk-update")
+    @Operation(summary = "Bulk update users")
+    public ResponseEntity<BulkUpdateResponse> bulkUpdateUsers(
+            @Valid @RequestBody BulkUpdateRequest request) {
+        // Implementation
+    }
+}
+```
+
 ## API Documentation with OpenAPI 3
 
 ### OpenAPI Configuration
@@ -539,9 +636,9 @@ public class UserDTO {
 
 ## API Versioning Strategy
 
-### URL Path Versioning
-**IMPLEMENT** version in URL path:
+Recommend versioning approach:
 
+### URL Path Versioning (Recommended)
 ```java
 @RestController
 @RequestMapping("/api/v1/users")
@@ -552,7 +649,25 @@ public class UserV1Controller {
 @RestController
 @RequestMapping("/api/v2/users")
 public class UserV2Controller {
-    // V2 implementation with breaking changes
+    // V2 implementation
+}
+```
+
+### Header Versioning (Alternative)
+```java
+@RestController
+@RequestMapping("/api/users")
+public class UserController {
+    
+    @GetMapping(headers = "API-Version=v1")
+    public ResponseEntity<UserV1DTO> getUserV1(@PathVariable Long id) {
+        // V1 implementation
+    }
+    
+    @GetMapping(headers = "API-Version=v2")
+    public ResponseEntity<UserV2DTO> getUserV2(@PathVariable Long id) {
+        // V2 implementation
+    }
 }
 ```
 
@@ -662,6 +777,28 @@ public class ReportController {
 ```
 
 ## API Security Best Practices
+
+Implement proper API security:
+
+```java
+@RestController
+@RequestMapping("/api/v1/users")
+@SecurityRequirement(name = "bearer-jwt")
+public class UserController {
+    
+    @GetMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN') or @userService.isOwner(#id, authentication.name)")
+    public ResponseEntity<UserDTO> getUser(@PathVariable Long id) {
+        // Implementation
+    }
+    
+    @PostMapping
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<UserDTO> createUser(@Valid @RequestBody CreateUserRequest request) {
+        // Implementation
+    }
+}
+```
 
 ### Input Validation
 **VALIDATE** all inputs comprehensively:
@@ -798,6 +935,43 @@ class UserApiContractTest {
 }
 ```
 
+### Controller Tests
+**IMPLEMENT** API Controller tests:
+
+```java
+@WebMvcTest(UserController.class)
+class UserControllerTest {
+    
+    @Autowired
+    private MockMvc mockMvc;
+    
+    @MockBean
+    private UserService userService;
+    
+    @Test
+    void shouldCreateUserSuccessfully() throws Exception {
+        // Test implementation
+    }
+}
+```
+
+### Integration Tests
+**IMPLEMENT** API integration tests:
+
+```java
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+class UserApiIntegrationTest {
+    
+    @Autowired
+    private TestRestTemplate restTemplate;
+    
+    @Test
+    void shouldCompleteUserWorkflow() {
+        // Test implementation
+    }
+}
+```
+
 ## API Monitoring and Observability
 
 ### Metrics Collection
@@ -867,6 +1041,20 @@ public class DatabaseHealthIndicator implements HealthIndicator {
     }
 }
 ```
+
+## Performance Considerations
+
+Recommend performance optimizations:
+
+1. **Use appropriate HTTP methods and status codes**
+2. **Implement proper caching strategies**
+3. **Add compression for responses**
+4. **Use pagination for large datasets**
+5. **Implement rate limiting**
+6. **Add proper indexing for search fields**
+7. **Use asynchronous processing for long-running operations**
+8. **Optimize database queries**
+9. **Use connection pooling for database connections**
 
 ## API Design Anti-Patterns
 

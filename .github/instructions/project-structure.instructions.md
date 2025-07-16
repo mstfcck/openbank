@@ -39,13 +39,11 @@ spring-boilerplate/
 │   │   │   ├── repository/              # Data access
 │   │   │   ├── domain/                  # JPA entities
 │   │   │   ├── dto/                     # Data transfer objects
-│   │   |   │   └── validator/           # Request validators
-│   │   │   ├── handler/                 # Exception handlers
+│   │   │   │   └── validator/           # Request validators
+│   │   │   ├── exception/               # Custom exception classes
+│   │   │   ├── handler/                 # Handlers
 │   │   │   ├── security/                # Security components
 │   │   │   ├── util/                    # Utility classes
-│   │   │   ├── exception/               # Exception handling
-│   │   │   ├── security/                # Security components
-│   │   │   └── util/                    # Utility classes
 │   │   └── resources/
 │   │       ├── application.yml          # Main configuration
 │   │       ├── application-dev.yml      # Development config
@@ -99,25 +97,27 @@ spring-boilerplate/
 │   │   │   │               ├── AccountServiceApplication.java
 │   │   │   │               ├── config/
 │   │   │   │               │   └── SecurityConfig.java
-│   │   │   │               ├── exception/
-│   │   │   │               │   └── GlobalExceptionHandler.java
-│   │   │   │               ├── security/
-│   │   │   │               │   └── JwtTokenProvider.java
-│   │   │   │               ├── validator/
-│   │   │   │               │   └── AccountRequestValidator.java
 │   │   │   │               ├── controller/
 │   │   │   │               │   └── AccountController.java
+│   │   │   │               ├── service/
+│   │   │   │               │   └── AccountService.java
+│   │   │   │               ├── repository/
+│   │   │   │               │   └── AccountRepository.java
+│   │   │   │               ├── domain/
+│   │   │   │               │   └── Account.java
 │   │   │   │               ├── dto/
 │   │   │   │               │   └── AccountRequest.java
 │   │   │   │               │   └── AccountResponse.java
 │   │   │   │               │   └── validator/
 │   │   │   │               │       └── AccountRequestValidator.java
-│   │   │   │               ├── domain/
-│   │   │   │               │   └── Account.java
-│   │   │   │               ├── repository/
-│   │   │   │               │   └── AccountRepository.java
-│   │   │   │               ├── service/
-│   │   │   │               │   └── AccountService.java
+│   │   │   │               ├── exception/
+│   │   │   │               │   └── CustomException.java
+│   │   │   │               ├── handler/
+│   │   │   │               │   └── GlobalExceptionHandler.java
+│   │   │   │               ├── security/
+│   │   │   │               │   └── JwtTokenProvider.java
+│   │   │   │               ├── util/
+│   │   │   │               │   └── AccountMapper.java
 │   │   │   │               └── client/
 │   │   │   │                   └── UserServiceClient.java
 │   │   │   └── resources/
@@ -139,17 +139,19 @@ spring-boilerplate/
 │   │   │   │               ├── TransactionServiceApplication.java
 │   │   │   │               ├── controller/
 │   │   │   │               │   └── TransactionController.java
+│   │   │   │               ├── service/
+│   │   │   │               │   └── TransactionService.java
+│   │   │   │               ├── repository/
+│   │   │   │               │   └── TransactionRepository.java
+│   │   │   │               ├── domain/
+│   │   │   │               │   └── Transaction.java
 │   │   │   │               ├── dto/
 │   │   │   │               │   └── TransactionRequest.java
 │   │   │   │               │   └── TransactionResponse.java
 │   │   │   │               │   └── validator/
 │   │   │   │               │       └── TransactionRequestValidator.java
-│   │   │   │               ├── domain/
-│   │   │   │               │   └── Transaction.java
-│   │   │   │               ├── repository/
-│   │   │   │               │   └── TransactionRepository.java
-│   │   │   │               ├── service/
-│   │   │   │               │   └── TransactionService.java
+│   │   │   │               ├── util/
+│   │   │   │               │   └── TransactionMapper.java
 │   │   │   │               └── client/
 │   │   │   │                   ├── AccountServiceClient.java
 │   │   │   │                   └── UserServiceClient.java
@@ -167,17 +169,19 @@ spring-boilerplate/
 │   │   │   │               ├── UserServiceApplication.java
 │   │   │   │               ├── controller/
 │   │   │   │               │   └── UserController.java
+│   │   │   │               └── service/
+│   │   │   │                   └── UserService.java
+│   │   │   │               ├── repository/
+│   │   │   │               │   └── UserRepository.java
+│   │   │   │               ├── domain/
+│   │   │   │               │   └── User.java
 │   │   │   │               ├── dto/
 │   │   │   │               │   └── UserRequest.java
 │   │   │   │               │   └── UserResponse.java
 │   │   │   │               │   └── validator/
 │   │   │   │               │       └── UserRequestValidator.java
-│   │   │   │               ├── domain/
-│   │   │   │               │   └── User.java
-│   │   │   │               ├── repository/
-│   │   │   │               │   └── UserRepository.java
-│   │   │   │               └── service/
-│   │   │   │                   └── UserService.java
+│   │   │   │               ├── util/
+│   │   │   │               │   └── UserMapper.java
 │   │   │   └── resources/
 │   │   │       └── application.yml
 │   │   └── test/
