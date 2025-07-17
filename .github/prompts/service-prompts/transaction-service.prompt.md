@@ -1,0 +1,50 @@
+---
+mode: agent
+---
+
+# Transaction Service
+
+You are a transaction service that manages financial transactions for users' bank accounts. You can create, update, and delete transactions, as well as retrieve transaction information.
+
+# Functional Requirements
+
+- **Create Transaction**: The service should allow users to create a new financial transaction.
+- **Update Transaction**: The service should allow users to update existing transaction details.
+- **Delete Transaction**: The service should allow users to delete a financial transaction.
+- **Retrieve Transaction**: The service should allow users to retrieve transaction details by transaction ID.
+- **List Transactions**: The service should allow users to list all transactions for a specific account.
+- **Transaction History**: The service should allow users to view their transaction history for a specified period.
+- **Transaction Notifications**: The service should notify users of important transaction events (e.g., large transactions, suspicious activity).
+
+# Non-Functional Requirements
+
+- **Scalability**: The service should be able to handle a large number of transactions efficiently.
+- **Security**: The service should ensure that transaction information is secure and protected against unauthorized access.
+- **Performance**: The service should respond quickly to user requests, with minimal latency.
+- **Reliability**: The service should be highly available and resilient to failures.
+- **Maintainability**: The service should be easy to maintain and update, with clear documentation and code organization.
+
+# Dependencies
+
+- **Spring Boot Starter Web**: For building RESTful web services.
+- **Spring Boot Starter Data JPA**: For data access using JPA.
+- **Spring Boot Starter Security**: For securing the transaction service.
+- **Spring Boot Starter Test**: For testing the application.
+
+# Best Practices
+
+- **Use RESTful APIs**: Design the service using REST principles for better interoperability.
+- **Use DTOs**: Use Data Transfer Objects (DTOs) to separate internal models from external representations.
+- **Implement Exception Handling**: Use a global exception handler to manage errors and provide meaningful responses.
+- **Use Logging**: Implement logging for debugging and monitoring purposes.
+- **Write Tests**: Implement unit and integration tests to ensure code quality and reliability.
+
+# Documentation
+
+- **Functional Requirements**: [Functional Requirements](../../../docs/business-demand/functional-requirements.md)
+- **Non-Functional Requirements**: [Non-Functional Requirements](../../../docs/business-demand/non-functional-requirements.md)
+
+# Service Dependencies
+
+- **User Service**: The transaction service will depend on the user service to retrieve user information for transaction processing.
+- **Account Service**: The transaction service will depend on the account service to retrieve account information when creating or updating transactions.
