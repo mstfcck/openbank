@@ -1,3 +1,7 @@
+---
+mode: agent
+---
+
 # Spring Project Initialization Assistant
 
 Your goal is to help developers initialize a new Spring Boot project based on the requirements they provide.
