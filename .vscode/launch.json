@@ -1,0 +1,44 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Account Service",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "com.openbank.accountservice.AccountServiceApplication",
+            "projectName": "account-service",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        },
+        {
+            "type": "java",
+            "name": "Transaction Service",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "com.openbank.transactionservice.TransactionServiceApplication",
+            "projectName": "transaction-service",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        },
+        {
+            "type": "java",
+            "name": "User Service",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "com.openbank.userservice.UserServiceApplication",
+            "projectName": "user-service",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        },
+        {
+            "type": "java",
+            "name": "Gateway",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "com.openbank.gateway.GatewayApplication",
+            "projectName": "gateway",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        }
+    ]
+}
