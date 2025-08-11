@@ -42,10 +42,12 @@ Handling 5 million concurrent transactions in a banking API, especially for stoc
 - Maintain a  **centralized or distributed in-memory cache**  (e.g., Redis) for real-time share availability.
 - Use **atomic decrement operations** to ensure no overselling:
 
+```bash
     if available_shares >= requested_shares:
         available_shares -= requested_shares
     else:
         reject_order()
+```
 
 ### 5.  **Scalability**
 
