@@ -1,0 +1,662 @@
+openapi: 3.0.4
+info:
+  title: Account Service API
+  description: Account Service for Open Bank Application
+  contact:
+    name: Open Bank Development Team
+    url: https://openbank.com
+    email: dev@openbank.com
+  license:
+    name: MIT License
+    url: https://opensource.org/licenses/MIT
+  version: 1.0.0
+servers:
+  - url: http://localhost:8092
+    description: Development server
+  - url: https://api.openbank.com
+    description: Production server
+tags:
+  - name: Account Management
+    description: API for managing bank accounts
+paths:
+  /api/accounts/{id}:
+    get:
+      tags:
+        - Account Management
+      summary: Get account by ID
+      operationId: getAccount
+      parameters:
+        - name: id
+          in: path
+          description: Account ID
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Account found
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AccountResponse'
+        '404':
+          description: Account not found
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AccountResponse'
+    put:
+      tags:
+        - Account Management
+      summary: Update account
+      operationId: updateAccount
+      parameters:
+        - name: id
+          in: path
+          description: Account ID
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateAccountRequest'
+        required: true
+      responses:
+        '200':
+          description: Account updated successfully
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AccountResponse'
+        '400':
+          description: Invalid request data
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AccountResponse'
+        '404':
+          description: Account not found
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AccountResponse'
+    delete:
+      tags:
+        - Account Management
+      summary: Delete account
+      operationId: deleteAccount
+      parameters:
+        - name: id
+          in: path
+          description: Account ID
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '204':
+          description: Account deleted successfully
+        '400':
+          description: Cannot delete account with non-zero balance
+        '404':
+          description: Account not found
+  /api/accounts:
+    get:
+      tags:
+        - Account Management
+      summary: Get all accounts
+      operationId: getAllAccounts
+      responses:
+        '200':
+          description: Accounts retrieved successfully
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/AccountResponse'
+    post:
+      tags:
+        - Account Management
+      summary: Create a new account
+      operationId: createAccount
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateAccountRequest'
+        required: true
+      responses:
+        '201':
+          description: Account created successfully
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AccountResponse'
+        '400':
+          description: Invalid request data
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AccountResponse'
+        '404':
+          description: User not found
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AccountResponse'
+        '409':
+          description: Account already exists
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AccountResponse'
+  /api/accounts/{id}/close:
+    post:
+      tags:
+        - Account Management
+      summary: Close account
+      operationId: closeAccount
+      parameters:
+        - name: id
+          in: path
+          description: Account ID
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Account closed successfully
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AccountResponse'
+        '400':
+          description: Account is already closed
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AccountResponse'
+        '404':
+          description: Account not found
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AccountResponse'
+  /api/accounts/{id}/balance:
+    get:
+      tags:
+        - Account Management
+      summary: Get account balance
+      operationId: getAccountBalance
+      parameters:
+        - name: id
+          in: path
+          description: Account ID
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Balance retrieved successfully
+          content:
+            '*/*':
+              schema:
+                type: number
+        '404':
+          description: Account not found
+          content:
+            '*/*':
+              schema:
+                type: number
+  /api/accounts/user/{userId}:
+    get:
+      tags:
+        - Account Management
+      summary: Get accounts by user ID
+      operationId: getAccountsByUserId
+      parameters:
+        - name: userId
+          in: path
+          description: User ID
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Accounts retrieved successfully
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/AccountResponse'
+        '404':
+          description: User not found
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/AccountResponse'
+  /api/accounts/user/{userId}/summaries:
+    get:
+      tags:
+        - Account Management
+      summary: Get account summaries for a user
+      operationId: getAccountSummaries
+      parameters:
+        - name: userId
+          in: path
+          description: User ID
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Account summaries retrieved successfully
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/AccountSummaryResponse'
+        '404':
+          description: User not found
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/AccountSummaryResponse'
+  /api/accounts/user/{userId}/paged:
+    get:
+      tags:
+        - Account Management
+      summary: Get accounts by user ID with pagination
+      operationId: getAccountsByUserIdPaged
+      parameters:
+        - name: userId
+          in: path
+          description: User ID
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: page
+          in: query
+          description: Page number (0-based)
+          required: false
+          schema:
+            type: integer
+            format: int32
+            default: 0
+          example: 0
+        - name: size
+          in: query
+          description: Page size
+          required: false
+          schema:
+            type: integer
+            format: int32
+            default: 20
+          example: 20
+        - name: sortBy
+          in: query
+          description: Sort by field
+          required: false
+          schema:
+            type: string
+            default: createdAt
+          example: createdAt
+        - name: sortDir
+          in: query
+          description: Sort direction
+          required: false
+          schema:
+            type: string
+            default: DESC
+          example: DESC
+      responses:
+        '200':
+          description: Accounts retrieved successfully
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/PagedResponseAccountResponse'
+        '404':
+          description: User not found
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/PagedResponseAccountResponse'
+  /api/accounts/statistics:
+    get:
+      tags:
+        - Account Management
+      summary: Get account statistics
+      operationId: getAccountStatistics
+      responses:
+        '200':
+          description: Statistics retrieved successfully
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AccountStatisticsResponse'
+  /api/accounts/paged:
+    get:
+      tags:
+        - Account Management
+      summary: Get all accounts with pagination
+      operationId: getAllAccountsPaged
+      parameters:
+        - name: page
+          in: query
+          description: Page number (0-based)
+          required: false
+          schema:
+            type: integer
+            format: int32
+            default: 0
+          example: 0
+        - name: size
+          in: query
+          description: Page size
+          required: false
+          schema:
+            type: integer
+            format: int32
+            default: 20
+          example: 20
+        - name: sortBy
+          in: query
+          description: Sort by field
+          required: false
+          schema:
+            type: string
+            default: createdAt
+          example: createdAt
+        - name: sortDir
+          in: query
+          description: Sort direction
+          required: false
+          schema:
+            type: string
+            default: DESC
+          example: DESC
+      responses:
+        '200':
+          description: Accounts retrieved successfully
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/PagedResponseAccountResponse'
+  /api/accounts/number/{accountNumber}:
+    get:
+      tags:
+        - Account Management
+      summary: Get account by account number
+      operationId: getAccountByNumber
+      parameters:
+        - name: accountNumber
+          in: path
+          description: Account number
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Account found
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AccountResponse'
+        '404':
+          description: Account not found
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AccountResponse'
+  /api/accounts/health:
+    get:
+      tags:
+        - Account Management
+      summary: Health check endpoint
+      operationId: healthCheck
+      responses:
+        '200':
+          description: Service is healthy
+          content:
+            '*/*':
+              schema:
+                type: string
+components:
+  schemas:
+    UpdateAccountRequest:
+      type: object
+      description: Account update request
+      properties:
+        status:
+          type: string
+          description: Account status
+          enum:
+            - ACTIVE
+            - INACTIVE
+            - CLOSED
+            - FROZEN
+          example: ACTIVE
+        currency:
+          type: string
+          description: Account currency
+          example: USD
+          maxLength: 3
+          minLength: 3
+          pattern: ^[A-Z]{3}$
+        overdraftLimit:
+          type: number
+          description: Overdraft limit
+          example: 500
+          minimum: 0
+    AccountResponse:
+      type: object
+      description: Account information response
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: Unique account identifier
+          example: 1
+        userId:
+          type: integer
+          format: int64
+          description: User ID who owns the account
+          example: 1
+        accountNumber:
+          type: string
+          description: Account number
+          example: ACC-1234567890
+        accountType:
+          type: string
+          description: Account type
+          example: SAVINGS
+        balance:
+          type: number
+          description: Current account balance
+          example: 1500
+        status:
+          type: string
+          description: Account status
+          example: ACTIVE
+        currency:
+          type: string
+          description: Account currency
+          example: USD
+        overdraftLimit:
+          type: number
+          description: Overdraft limit
+          example: 500
+        openedAt:
+          type: string
+          format: date-time
+          description: Account opening date
+          example: '2023-01-01T10:00:00'
+        closedAt:
+          type: string
+          format: date-time
+          description: Account closing date
+          example: '2023-12-31T10:00:00'
+        createdAt:
+          type: string
+          format: date-time
+          description: Account creation timestamp
+          example: '2023-01-01T10:00:00'
+        updatedAt:
+          type: string
+          format: date-time
+          description: Account last update timestamp
+          example: '2023-01-02T10:00:00'
+    CreateAccountRequest:
+      type: object
+      description: Account creation request
+      properties:
+        userId:
+          type: integer
+          format: int64
+          description: User ID who owns the account
+          example: 1
+        accountType:
+          type: string
+          description: Account type
+          enum:
+            - CHECKING
+            - SAVINGS
+            - BUSINESS
+            - INVESTMENT
+          example: SAVINGS
+        initialCredit:
+          type: number
+          description: Initial deposit amount
+          example: 100
+          minimum: 0
+        currency:
+          type: string
+          default: USD
+          description: Account currency
+          example: USD
+          maxLength: 3
+          minLength: 3
+          pattern: ^[A-Z]{3}$
+        overdraftLimit:
+          type: number
+          description: Overdraft limit
+          example: 500
+          minimum: 0
+      required:
+        - accountType
+        - userId
+    AccountSummaryResponse:
+      type: object
+      description: Account summary information
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: Unique account identifier
+          example: 1
+        accountNumber:
+          type: string
+          description: Account number
+          example: ACC-1234567890
+        accountType:
+          type: string
+          description: Account type
+          example: SAVINGS
+        balance:
+          type: number
+          description: Current account balance
+          example: 1500
+        status:
+          type: string
+          description: Account status
+          example: ACTIVE
+        currency:
+          type: string
+          description: Account currency
+          example: USD
+    PagedResponseAccountResponse:
+      type: object
+      description: Paginated response wrapper
+      properties:
+        content:
+          type: array
+          description: List of content items
+          items:
+            $ref: '#/components/schemas/AccountResponse'
+        page:
+          type: integer
+          format: int32
+          description: Current page number (0-based)
+          example: 0
+        size:
+          type: integer
+          format: int32
+          description: Page size
+          example: 20
+        totalElements:
+          type: integer
+          format: int64
+          description: Total number of elements
+          example: 100
+        totalPages:
+          type: integer
+          format: int32
+          description: Total number of pages
+          example: 5
+        first:
+          type: boolean
+          description: Whether this is the first page
+          example: true
+        last:
+          type: boolean
+          description: Whether this is the last page
+          example: false
+        hasNext:
+          type: boolean
+          description: Whether there is a next page
+          example: true
+        hasPrevious:
+          type: boolean
+          description: Whether there is a previous page
+          example: false
+    AccountStatisticsResponse:
+      type: object
+      description: Account statistics response
+      properties:
+        totalAccounts:
+          type: integer
+          format: int64
+          description: Total number of accounts
+          example: 1000
+        activeAccounts:
+          type: integer
+          format: int64
+          description: Number of active accounts
+          example: 850
+        closedAccounts:
+          type: integer
+          format: int64
+          description: Number of closed accounts
+          example: 100
+        frozenAccounts:
+          type: integer
+          format: int64
+          description: Number of frozen accounts
+          example: 50

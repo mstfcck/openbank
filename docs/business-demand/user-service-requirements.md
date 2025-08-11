@@ -22,25 +22,9 @@ You are a user service that manages users. You can create, update, and delete us
 - **Reliability**: The service should be highly available and resilient to failures.
 - **Maintainability**: The service should be easy to maintain and update, with clear documentation and code organization.
 
-# Dependencies
-
-- **Spring Boot Starter Web**: For building RESTful web services.
-- **Spring Boot Starter Data JPA**: For data access using JPA.
-- **Spring Boot Starter Security**: For securing the user service.
-- **Spring Boot Starter Test**: For testing the application.
-
-# Best Practices
-
-- **Use RESTful APIs**: Design the service using REST principles for better interoperability.
-- **Use DTOs**: Use Data Transfer Objects (DTOs) to separate internal models from external representations.
-- **Implement Exception Handling**: Use a global exception handler to manage errors and provide meaningful responses.
-- **Use Logging**: Implement logging for debugging and monitoring purposes.
-- **Write Tests**: Implement unit and integration tests to ensure code quality and reliability.
-
 # Documentation
 
 - **Functional Requirements**: [Functional Requirements](functional-requirements.md)
-- **Non-Functional Requirements**: [Non-Functional Requirements](non-functional-requirements.md)
 
 # Service Dependencies
 

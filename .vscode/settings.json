@@ -1,5 +1,14 @@
 {
     "java.compile.nullAnalysis.mode": "automatic",
     "java.debug.settings.onBuildFailureProceed": true,
-    "java.configuration.updateBuildConfiguration": "interactive"
+    "java.configuration.updateBuildConfiguration": "interactive",
+    "chat.mcp.serverSampling": {
+        "openbank/.vscode/mcp.json: github": {
+            "allowedModels": [
+                "copilot/gpt-4.1",
+                "copilot/claude-sonnet-4",
+                "copilot/gpt-5"
+            ]
+        }
+    }
 }

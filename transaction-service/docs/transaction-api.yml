@@ -1,0 +1,975 @@
+openapi: 3.0.4
+info:
+  title: Transaction Service API
+  description: Transaction Service for Open Bank Application
+  contact:
+    name: Open Bank Development Team
+    url: https://openbank.com
+    email: dev@openbank.com
+  license:
+    name: MIT License
+    url: https://opensource.org/licenses/MIT
+  version: 1.0.0
+servers:
+  - url: http://localhost:8093
+    description: Development server
+  - url: https://api.openbank.com/transactions
+    description: Production server
+security:
+  - basicAuth: []
+tags:
+  - name: Transaction Management
+    description: API for managing financial transactions
+paths:
+  /api/transactions:
+    get:
+      tags:
+        - Transaction Management
+      summary: Get all transactions with pagination
+      operationId: getAllTransactions
+      parameters:
+        - name: page
+          in: query
+          description: Page number (0-based)
+          required: false
+          schema:
+            type: integer
+            format: int32
+            default: 0
+          example: 0
+        - name: size
+          in: query
+          description: Page size
+          required: false
+          schema:
+            type: integer
+            format: int32
+            default: 20
+          example: 20
+        - name: sortBy
+          in: query
+          description: Sort by field
+          required: false
+          schema:
+            type: string
+            default: createdAt
+          example: createdAt
+        - name: sortDir
+          in: query
+          description: Sort direction
+          required: false
+          schema:
+            type: string
+            default: DESC
+          example: DESC
+      responses:
+        '200':
+          description: Transactions retrieved successfully
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/PagedResponseTransactionResponse'
+      security:
+        - basicAuth: []
+    post:
+      tags:
+        - Transaction Management
+      summary: Create a new transaction
+      operationId: createTransaction
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateTransactionRequest'
+        required: true
+      responses:
+        '201':
+          description: Transaction created successfully
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/TransactionResponse'
+        '400':
+          description: Invalid request data
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/TransactionResponse'
+        '404':
+          description: Account not found
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/TransactionResponse'
+        '409':
+          description: Transaction already exists
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/TransactionResponse'
+      security:
+        - basicAuth: []
+  /api/transactions/{id}/retry:
+    post:
+      tags:
+        - Transaction Management
+      summary: Retry a failed transaction
+      operationId: retryTransaction
+      parameters:
+        - name: id
+          in: path
+          description: Transaction ID
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Transaction retry initiated
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/TransactionResponse'
+        '400':
+          description: Transaction cannot be retried
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/TransactionResponse'
+        '404':
+          description: Transaction not found
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/TransactionResponse'
+      security:
+        - basicAuth: []
+  /api/transactions/{id}/cancel:
+    post:
+      tags:
+        - Transaction Management
+      summary: Cancel a pending transaction
+      operationId: cancelTransaction
+      parameters:
+        - name: id
+          in: path
+          description: Transaction ID
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Transaction cancelled successfully
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/TransactionResponse'
+        '400':
+          description: Transaction cannot be cancelled
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/TransactionResponse'
+        '404':
+          description: Transaction not found
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/TransactionResponse'
+      security:
+        - basicAuth: []
+  /api/transactions/admin/process-pending:
+    post:
+      tags:
+        - Transaction Management
+      summary: Process pending transactions (admin endpoint)
+      operationId: processPendingTransactions
+      responses:
+        '200':
+          description: Pending transactions processed
+          content:
+            '*/*':
+              schema:
+                type: string
+      security:
+        - basicAuth: []
+  /api/transactions/admin/cleanup-old-pending:
+    post:
+      tags:
+        - Transaction Management
+      summary: Clean up old pending transactions (admin endpoint)
+      operationId: cleanupOldPendingTransactions
+      responses:
+        '200':
+          description: Old pending transactions cleaned up
+          content:
+            '*/*':
+              schema:
+                type: string
+      security:
+        - basicAuth: []
+  /api/transactions/{id}:
+    get:
+      tags:
+        - Transaction Management
+      summary: Get transaction by ID
+      operationId: getTransaction
+      parameters:
+        - name: id
+          in: path
+          description: Transaction ID
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Transaction found
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/TransactionResponse'
+        '404':
+          description: Transaction not found
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/TransactionResponse'
+      security:
+        - basicAuth: []
+  /api/transactions/type/{type}:
+    get:
+      tags:
+        - Transaction Management
+      summary: Get transactions by type
+      operationId: getTransactionsByType
+      parameters:
+        - name: type
+          in: path
+          description: Transaction type
+          required: true
+          schema:
+            type: string
+        - name: page
+          in: query
+          description: Page number (0-based)
+          required: false
+          schema:
+            type: integer
+            format: int32
+            default: 0
+          example: 0
+        - name: size
+          in: query
+          description: Page size
+          required: false
+          schema:
+            type: integer
+            format: int32
+            default: 20
+          example: 20
+        - name: sortBy
+          in: query
+          description: Sort by field
+          required: false
+          schema:
+            type: string
+            default: createdAt
+          example: createdAt
+        - name: sortDir
+          in: query
+          description: Sort direction
+          required: false
+          schema:
+            type: string
+            default: DESC
+          example: DESC
+      responses:
+        '200':
+          description: Transactions retrieved successfully
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/PagedResponseTransactionResponse'
+        '400':
+          description: Invalid type
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/PagedResponseTransactionResponse'
+      security:
+        - basicAuth: []
+  /api/transactions/status/{status}:
+    get:
+      tags:
+        - Transaction Management
+      summary: Get transactions by status
+      operationId: getTransactionsByStatus
+      parameters:
+        - name: status
+          in: path
+          description: Transaction status
+          required: true
+          schema:
+            type: string
+        - name: page
+          in: query
+          description: Page number (0-based)
+          required: false
+          schema:
+            type: integer
+            format: int32
+            default: 0
+          example: 0
+        - name: size
+          in: query
+          description: Page size
+          required: false
+          schema:
+            type: integer
+            format: int32
+            default: 20
+          example: 20
+        - name: sortBy
+          in: query
+          description: Sort by field
+          required: false
+          schema:
+            type: string
+            default: createdAt
+          example: createdAt
+        - name: sortDir
+          in: query
+          description: Sort direction
+          required: false
+          schema:
+            type: string
+            default: DESC
+          example: DESC
+      responses:
+        '200':
+          description: Transactions retrieved successfully
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/PagedResponseTransactionResponse'
+        '400':
+          description: Invalid status
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/PagedResponseTransactionResponse'
+      security:
+        - basicAuth: []
+  /api/transactions/statistics:
+    get:
+      tags:
+        - Transaction Management
+      summary: Get overall transaction statistics
+      operationId: getTransactionStatistics
+      responses:
+        '200':
+          description: Statistics retrieved successfully
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/TransactionStatisticsResponse'
+      security:
+        - basicAuth: []
+  /api/transactions/reference/{reference}:
+    get:
+      tags:
+        - Transaction Management
+      summary: Get transaction by reference
+      operationId: getTransactionByReference
+      parameters:
+        - name: reference
+          in: path
+          description: Transaction reference
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Transaction found
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/TransactionResponse'
+        '404':
+          description: Transaction not found
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/TransactionResponse'
+      security:
+        - basicAuth: []
+  /api/transactions/health:
+    get:
+      tags:
+        - Transaction Management
+      summary: Health check endpoint
+      operationId: healthCheck
+      responses:
+        '200':
+          description: Service is healthy
+          content:
+            '*/*':
+              schema:
+                type: string
+      security:
+        - basicAuth: []
+  /api/transactions/date-range:
+    get:
+      tags:
+        - Transaction Management
+      summary: Get transactions within date range
+      operationId: getTransactionsByDateRange
+      parameters:
+        - name: startDate
+          in: query
+          description: Start date (yyyy-MM-dd'T'HH:mm:ss)
+          required: true
+          schema:
+            type: string
+            format: date-time
+        - name: endDate
+          in: query
+          description: End date (yyyy-MM-dd'T'HH:mm:ss)
+          required: true
+          schema:
+            type: string
+            format: date-time
+      responses:
+        '200':
+          description: Transactions retrieved successfully
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TransactionResponse'
+        '400':
+          description: Invalid date format
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TransactionResponse'
+      security:
+        - basicAuth: []
+  /api/transactions/account/{accountId}:
+    get:
+      tags:
+        - Transaction Management
+      summary: Get transactions by account ID
+      operationId: getTransactionsByAccountId
+      parameters:
+        - name: accountId
+          in: path
+          description: Account ID
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Transactions retrieved successfully
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TransactionSummaryResponse'
+        '404':
+          description: Account not found
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TransactionSummaryResponse'
+      security:
+        - basicAuth: []
+  /api/transactions/account/{accountId}/statistics:
+    get:
+      tags:
+        - Transaction Management
+      summary: Get account-specific transaction statistics
+      operationId: getAccountTransactionStatistics
+      parameters:
+        - name: accountId
+          in: path
+          description: Account ID
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Statistics retrieved successfully
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AccountTransactionStatisticsResponse'
+        '404':
+          description: Account not found
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AccountTransactionStatisticsResponse'
+      security:
+        - basicAuth: []
+  /api/transactions/account/{accountId}/paged:
+    get:
+      tags:
+        - Transaction Management
+      summary: Get transactions by account ID with pagination
+      operationId: getTransactionsByAccountIdPaged
+      parameters:
+        - name: accountId
+          in: path
+          description: Account ID
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: page
+          in: query
+          description: Page number (0-based)
+          required: false
+          schema:
+            type: integer
+            format: int32
+            default: 0
+          example: 0
+        - name: size
+          in: query
+          description: Page size
+          required: false
+          schema:
+            type: integer
+            format: int32
+            default: 20
+          example: 20
+        - name: sortBy
+          in: query
+          description: Sort by field
+          required: false
+          schema:
+            type: string
+            default: createdAt
+          example: createdAt
+        - name: sortDir
+          in: query
+          description: Sort direction
+          required: false
+          schema:
+            type: string
+            default: DESC
+          example: DESC
+      responses:
+        '200':
+          description: Transactions retrieved successfully
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/PagedResponseTransactionSummaryResponse'
+        '404':
+          description: Account not found
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/PagedResponseTransactionSummaryResponse'
+      security:
+        - basicAuth: []
+  /api/transactions/account/{accountId}/date-range:
+    get:
+      tags:
+        - Transaction Management
+      summary: Get account transactions within date range
+      operationId: getAccountTransactionsByDateRange
+      parameters:
+        - name: accountId
+          in: path
+          description: Account ID
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: startDate
+          in: query
+          description: Start date (yyyy-MM-dd'T'HH:mm:ss)
+          required: true
+          schema:
+            type: string
+            format: date-time
+        - name: endDate
+          in: query
+          description: End date (yyyy-MM-dd'T'HH:mm:ss)
+          required: true
+          schema:
+            type: string
+            format: date-time
+      responses:
+        '200':
+          description: Transactions retrieved successfully
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TransactionSummaryResponse'
+        '400':
+          description: Invalid date format
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TransactionSummaryResponse'
+        '404':
+          description: Account not found
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TransactionSummaryResponse'
+      security:
+        - basicAuth: []
+components:
+  schemas:
+    CreateTransactionRequest:
+      type: object
+      description: Transaction creation request
+      properties:
+        fromAccountId:
+          type: integer
+          format: int64
+          description: >-
+            Source account ID for the transaction (null for deposits from
+            external sources)
+          example: 1
+        toAccountId:
+          type: integer
+          format: int64
+          description: >-
+            Destination account ID for the transaction (null for withdrawals to
+            external)
+          example: 2
+        amount:
+          type: number
+          description: Transaction amount (must be positive)
+          example: 100.5
+          minimum: 0.01
+        transactionType:
+          type: string
+          description: Type of transaction
+          enum:
+            - DEPOSIT
+            - WITHDRAWAL
+            - TRANSFER
+            - PAYMENT
+            - REFUND
+          example: TRANSFER
+          minLength: 1
+        description:
+          type: string
+          description: Transaction description
+          example: Monthly salary payment
+          maxLength: 500
+          minLength: 0
+        currency:
+          type: string
+          default: USD
+          description: Transaction currency (3-letter ISO code)
+          example: USD
+          maxLength: 3
+          minLength: 3
+          pattern: ^[A-Z]{3}$
+        fee:
+          type: number
+          description: Transaction fee (optional)
+          example: 2.5
+          minimum: 0
+        externalReference:
+          type: string
+          description: External reference for the transaction
+          example: PAY-123456789
+          maxLength: 50
+          minLength: 0
+      required:
+        - amount
+        - transactionType
+    TransactionResponse:
+      type: object
+      description: Transaction information response
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: Unique transaction identifier
+          example: 1
+        fromAccountId:
+          type: integer
+          format: int64
+          description: Source account ID
+          example: 1
+        toAccountId:
+          type: integer
+          format: int64
+          description: Destination account ID
+          example: 2
+        amount:
+          type: number
+          description: Transaction amount
+          example: 100.5
+        transactionType:
+          type: string
+          description: Transaction type
+          example: TRANSFER
+        status:
+          type: string
+          description: Transaction status
+          example: COMPLETED
+        description:
+          type: string
+          description: Transaction description
+          example: Monthly salary payment
+        reference:
+          type: string
+          description: Unique transaction reference
+          example: TXN-1234567890
+        currency:
+          type: string
+          description: Transaction currency
+          example: USD
+        fee:
+          type: number
+          description: Transaction fee
+          example: 2.5
+        totalAmount:
+          type: number
+          description: Total amount including fees
+          example: 103
+        createdAt:
+          type: string
+          format: date-time
+          description: Transaction creation timestamp
+          example: '2023-01-01T10:00:00'
+        updatedAt:
+          type: string
+          format: date-time
+          description: Transaction last update timestamp
+          example: '2023-01-01T10:05:00'
+        processedAt:
+          type: string
+          format: date-time
+          description: Transaction processing timestamp
+          example: '2023-01-01T10:01:00'
+        errorMessage:
+          type: string
+          description: Error message if transaction failed
+          example: Insufficient funds
+        createdBy:
+          type: string
+          description: User who created the transaction
+          example: john.doe
+        lastModifiedBy:
+          type: string
+          description: User who last modified the transaction
+          example: system
+    PagedResponseTransactionResponse:
+      type: object
+      description: Paginated response wrapper
+      properties:
+        content:
+          type: array
+          description: List of items for the current page
+          items:
+            $ref: '#/components/schemas/TransactionResponse'
+        page:
+          type: integer
+          format: int32
+          description: Current page number (0-based)
+          example: 0
+        size:
+          type: integer
+          format: int32
+          description: Number of items per page
+          example: 20
+        totalElements:
+          type: integer
+          format: int64
+          description: Total number of elements across all pages
+          example: 100
+        totalPages:
+          type: integer
+          format: int32
+          description: Total number of pages
+          example: 5
+        first:
+          type: boolean
+          description: Whether this is the first page
+          example: true
+        last:
+          type: boolean
+          description: Whether this is the last page
+          example: false
+        hasNext:
+          type: boolean
+          description: Whether there is a next page
+          example: true
+        hasPrevious:
+          type: boolean
+          description: Whether there is a previous page
+          example: false
+    TransactionStatisticsResponse:
+      type: object
+      description: Transaction statistics information
+      properties:
+        totalTransactions:
+          type: integer
+          format: int64
+          description: Total number of transactions
+          example: 1000
+        completedTransactions:
+          type: integer
+          format: int64
+          description: Number of completed transactions
+          example: 950
+        pendingTransactions:
+          type: integer
+          format: int64
+          description: Number of pending transactions
+          example: 30
+        failedTransactions:
+          type: integer
+          format: int64
+          description: Number of failed transactions
+          example: 20
+        successRate:
+          type: number
+          format: double
+          description: Success rate as percentage
+          example: 95
+    TransactionSummaryResponse:
+      type: object
+      description: Transaction summary information
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: Unique transaction identifier
+          example: 1
+        amount:
+          type: number
+          description: Transaction amount
+          example: 100.5
+        transactionType:
+          type: string
+          description: Transaction type
+          example: TRANSFER
+        status:
+          type: string
+          description: Transaction status
+          example: COMPLETED
+        description:
+          type: string
+          description: Transaction description
+          example: Monthly salary payment
+        reference:
+          type: string
+          description: Unique transaction reference
+          example: TXN-1234567890
+        createdAt:
+          type: string
+          format: date-time
+          description: Transaction creation timestamp
+          example: '2023-01-01T10:00:00'
+        otherAccountId:
+          type: integer
+          format: int64
+          description: Other account involved in the transaction
+          example: 2
+        direction:
+          type: string
+          description: Direction of the transaction from perspective of the queried account
+          example: OUTGOING
+    AccountTransactionStatisticsResponse:
+      type: object
+      description: Account transaction statistics information
+      properties:
+        accountId:
+          type: integer
+          format: int64
+          description: Account identifier
+          example: 1
+        totalTransactions:
+          type: integer
+          format: int64
+          description: Total number of transactions for this account
+          example: 150
+        netAmountThisMonth:
+          type: number
+          description: Net amount of transactions for this month
+          example: 2500.75
+        largestTransaction:
+          type: number
+          description: Largest transaction amount for this account
+          example: 5000
+    PagedResponseTransactionSummaryResponse:
+      type: object
+      description: Paginated response wrapper
+      properties:
+        content:
+          type: array
+          description: List of items for the current page
+          items:
+            $ref: '#/components/schemas/TransactionSummaryResponse'
+        page:
+          type: integer
+          format: int32
+          description: Current page number (0-based)
+          example: 0
+        size:
+          type: integer
+          format: int32
+          description: Number of items per page
+          example: 20
+        totalElements:
+          type: integer
+          format: int64
+          description: Total number of elements across all pages
+          example: 100
+        totalPages:
+          type: integer
+          format: int32
+          description: Total number of pages
+          example: 5
+        first:
+          type: boolean
+          description: Whether this is the first page
+          example: true
+        last:
+          type: boolean
+          description: Whether this is the last page
+          example: false
+        hasNext:
+          type: boolean
+          description: Whether there is a next page
+          example: true
+        hasPrevious:
+          type: boolean
+          description: Whether there is a previous page
+          example: false
+  securitySchemes:
+    basicAuth:
+      type: http
+      description: >-
+        Basic Authentication (username: user, password: check server logs for
+        generated password)
+      scheme: basic
